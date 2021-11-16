@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float positionYawFactor;
     [SerializeField] float controlRollFactor;
 
+    [SerializeField] GameObject[] lasers;
+
     float horizontal, vertical;
 
     Transform cachedTransform;
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         Rotate();
+        Fire();
     }
 
     void Move()
@@ -51,5 +54,33 @@ public class PlayerController : MonoBehaviour
         float roll = horizontal * controlRollFactor * Time.deltaTime;
 
         cachedTransform.localRotation = Quaternion.Euler(pitch, yaw, roll);
+    }
+
+    void Fire()
+    {
+        if (Input.GetButton("Fire1"))
+        {
+            ActivateLasers(true);
+        }
+        else
+        {
+            ActivateLasers(false);
+        }
+    }
+
+    void ActivateLasers(bool active)
+    {
+        foreach (GameObject laser in lasers)
+        {
+            var emissionModule = laser.GetComponent<ParticleSystem>().emission;
+            if (active == true)
+            {
+                emissionModule.enabled = true;
+            }
+            else
+            {
+                emissionModule.enabled = false;
+            }
+        }
     }
 }
