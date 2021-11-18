@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -82,5 +83,20 @@ public class PlayerController : MonoBehaviour
                 emissionModule.enabled = false;
             }
         }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag != "Terrain")
+        {
+            GetComponent<PlayerController>().enabled = false;
+            ReloadLevel();
+        }
+    }
+
+    void ReloadLevel()
+    {
+        int currentSceneID = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneID);
     }
 }
